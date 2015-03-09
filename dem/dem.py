@@ -14,7 +14,14 @@ def get_elevation(data):
     :param data:
         Parsed GeoJSON data structure.
     """
-    coordinates = map(lambda f: f['geometry']['coordinates'], data['features'])
+    
+    def get_coordinates(geometry):
+        if geometry['type'] == 'Point':
+            return [geometry['coordinates']]
+        elif geometry['type'] == 'LineString':
+            return geometry['coordinates']
+    
+    coordinates = map(lambda f: get_coordinates(f['geometry']), data['features'])
     return [c for clist in coordinates for c in clist]
 
 
@@ -73,6 +80,7 @@ def toDigitalElevationModel(srcpath, dstpath):
         data = json.loads(src.read())
     
     elevation = get_elevation(data)
+    
     longitudes = map(lambda c: c[0], elevation)
     latitudes = map(lambda c: c[1], elevation)
     

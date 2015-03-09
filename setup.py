@@ -34,6 +34,6 @@ setup(name='toDEM',
       },
       entry_points="""
       [console_scripts]
-      dem=dem.scripts.cli:cli
+      dem=dem.scripts.cli:dem
       """
       )
